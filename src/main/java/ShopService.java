@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 public class ShopService {
     private ProductRepo productRepo = new ProductRepo();
@@ -20,5 +22,12 @@ public class ShopService {
         Order newOrder = new Order(UUID.randomUUID().toString(), products);
 
         return orderRepo.addOrder(newOrder);
+    }
+
+    public List<Order> getListOfOrders(OrderStatus orderStatus) {
+        Stream<Order> ordersStream = orderRepo.getOrders().stream()
+                .filter((order) -> Objects.equals(order.status(), orderStatus));
+        List<Order> ordersList = ordersStream.toList();
+        return ordersList;
     }
 }

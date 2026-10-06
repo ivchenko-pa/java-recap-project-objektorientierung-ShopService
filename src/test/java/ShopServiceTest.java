@@ -33,4 +33,32 @@ class ShopServiceTest {
         //THEN
         assertNull(actual);
     }
+
+    @Test
+    void getListOfOrders_shouldBeOnePROCESSINGOrder_whenOnlyOnePROCESSINGOrderInRepo() {
+        //GIVEN
+        ShopService shopService = new ShopService();
+        List<String> productsIds = List.of("1");
+        shopService.addOrder(productsIds);
+
+        //WHEN
+        List<Order> actualFilteredOrders = shopService.getListOfOrders(OrderStatus.PROCESSING);
+
+        //THEN
+        assertEquals(1, actualFilteredOrders.size());
+    }
+
+    @Test
+    void getListOfOrders_shouldBeZeroIN_DELIVERYOrders_whenOnlyOnePROCESSINGOrderInRepo() {
+        //GIVEN
+        ShopService shopService = new ShopService();
+        List<String> productsIds = List.of("1");
+        shopService.addOrder(productsIds);
+
+        //WHEN
+        List<Order> actualFilteredOrders = shopService.getListOfOrders(OrderStatus.IN_DELIVERY);
+
+        //THEN
+        assertEquals(0, actualFilteredOrders.size());
+    }
 }
