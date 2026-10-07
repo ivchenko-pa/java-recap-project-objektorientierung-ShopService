@@ -2,8 +2,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ShopServiceTest {
 
@@ -31,6 +30,7 @@ class ShopServiceTest {
         //WHEN
         try {
             shopService.addOrder(productsIds);
+            fail("Expected ProductNotAvailableException not thrown, even though product 2 was ordered, that does not exist.");
             //THEN
         } catch (ProductNotFoundException e) {
             String expected = "Product mit der Id: 2 konnte nicht bestellt werden!";
@@ -66,4 +66,35 @@ class ShopServiceTest {
         //THEN
         assertEquals(0, actualFilteredOrders.size());
     }
+
+    @Test
+    void updateOrder_shouldBeOneOrderIN_DELIVERY_whenUpdatedToIN_DELIVERY() {
+        //GIVEN
+        ShopService shopService = new ShopService();
+        List<String> productsIds = List.of("1");
+        Order order = shopService.addOrder(productsIds);
+
+        //WHEN
+        shopService.updateOrder(order.id(), OrderStatus.IN_DELIVERY);
+
+        //THEN
+        List<Order> listWithUpdatedOrder = shopService.getListOfOrders(OrderStatus.IN_DELIVERY);
+        assertEquals(1, listWithUpdatedOrder.size());
+    }
+
+    @Test
+    void updateOrder_shouldBeZeroOrdersWithPROCESSING_whenUpdatedToIN_DELIVERY() {
+        //GIVEN
+        ShopService shopService = new ShopService();
+        List<String> productsIds = List.of("1");
+        Order order = shopService.addOrder(productsIds);
+
+        //WHEN
+        shopService.updateOrder(order.id(), OrderStatus.IN_DELIVERY);
+
+        //THEN
+        List<Order> listWithOutdatedOrder = shopService.getListOfOrders(OrderStatus.PROCESSING);
+        assertEquals(0, listWithOutdatedOrder.size());
+    }
+
 }

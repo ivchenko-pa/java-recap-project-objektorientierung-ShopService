@@ -23,6 +23,13 @@ public class ShopService {
         return orderRepo.addOrder(newOrder);
     }
 
+    public Order updateOrder(String orderId, OrderStatus status){
+        Order order = orderRepo.getOrderById(orderId);
+        orderRepo.removeOrder(orderId);
+        orderRepo.addOrder(order.withStatus(status));
+        return orderRepo.getOrderById(orderId);
+    }
+
     public List<Order> getListOfOrders(OrderStatus orderStatus) {
         Stream<Order> ordersStream = orderRepo.getOrders().stream()
                 .filter((order) -> Objects.equals(order.status(), orderStatus));
