@@ -1,9 +1,8 @@
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class ProductRepoTest {
 
@@ -27,7 +26,7 @@ class ProductRepoTest {
         ProductRepo repo = new ProductRepo();
 
         //WHEN
-        Product actual = repo.getProductById("1");
+        Product actual = repo.getProductById("1").orElse(null);
 
         //THEN
         Product expected = new Product("1", "Apfel");
@@ -46,7 +45,7 @@ class ProductRepoTest {
         //THEN
         Product expected = new Product("2", "Banane");
         assertEquals(actual, expected);
-        assertEquals(repo.getProductById("2"), expected);
+        assertEquals(repo.getProductById("2").get(), expected);
     }
 
     @org.junit.jupiter.api.Test
@@ -58,6 +57,6 @@ class ProductRepoTest {
         repo.removeProduct("1");
 
         //THEN
-        assertNull(repo.getProductById("1"));
+        assertNull(repo.getProductById("1").orElse(null));
     }
 }
