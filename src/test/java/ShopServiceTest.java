@@ -2,7 +2,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class ShopServiceTest {
 
@@ -22,7 +23,7 @@ class ShopServiceTest {
     }
 
     @Test
-    void addOrderTest_whenInvalidProductId_expectNull() {
+    void addOrderTest_whenOneInvalidProductIdAndSecondIsValid_expectOneValidInOrder() {
         //GIVEN
         ShopService shopService = new ShopService();
         List<String> productsIds = List.of("1", "2");
@@ -31,7 +32,7 @@ class ShopServiceTest {
         Order actual = shopService.addOrder(productsIds);
 
         //THEN
-        assertNull(actual);
+        assertEquals(1, actual.products().size());
     }
 
     @Test
