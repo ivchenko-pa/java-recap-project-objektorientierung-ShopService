@@ -1,5 +1,6 @@
 import org.junit.jupiter.api.Test;
 
+import java.time.Instant;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -14,9 +15,10 @@ class ShopServiceTest {
 
         //WHEN
         Order actual = shopService.addOrder(productsIds);
+        Instant actualTimestamp = actual.timestamp();
 
         //THEN
-        Order expected = new Order("-1", List.of(new Product("1", "Apfel")));
+        Order expected = new Order("-1", actualTimestamp, List.of(new Product("1", "Apfel")));
         assertEquals(expected.products(), actual.products());
         assertNotNull(expected.id());
     }
@@ -97,4 +99,19 @@ class ShopServiceTest {
         assertEquals(0, listWithOutdatedOrder.size());
     }
 
+    @Test
+    void updateOrder_shouldBeSameTimestamp_whenOrderStatusUpdated() {
+        //GIVEN
+        ShopService shopService = new ShopService();
+        List<String> productsIds = List.of("1");
+        Order order = shopService.addOrder(productsIds);
+        Instant expectedTimestamp = order.timestamp();
+
+        //WHEN
+        Order updatedOrder = shopService.updateOrder(order.id(), OrderStatus.IN_DELIVERY);
+
+        //THEN
+        Instant actualTimestamp = order.timestamp();
+        assertEquals(expectedTimestamp, actualTimestamp);
+    }
 }

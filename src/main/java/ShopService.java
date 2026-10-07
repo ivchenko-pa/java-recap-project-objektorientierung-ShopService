@@ -1,3 +1,4 @@
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -18,7 +19,7 @@ public class ShopService {
             }
         }
 
-        Order newOrder = new Order(UUID.randomUUID().toString(), products);
+        Order newOrder = new Order(UUID.randomUUID().toString(), Instant.now(), products);
 
         return orderRepo.addOrder(newOrder);
     }
