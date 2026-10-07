@@ -10,7 +10,9 @@ class ShopServiceTest {
     @Test
     void addOrderTest() {
         //GIVEN
-        ShopService shopService = new ShopService();
+        ProductRepo productRepo = new ProductRepo();
+        OrderRepo orderRepo = new OrderMapRepo();
+        ShopService shopService = new ShopService(productRepo, orderRepo);
         List<String> productsIds = List.of("1");
 
         //WHEN
@@ -26,7 +28,9 @@ class ShopServiceTest {
     @Test
     void addOrderTest_whenOneInvalidProductIdAndSecondIsValid_expectException() {
         //GIVEN
-        ShopService shopService = new ShopService();
+        ProductRepo productRepo = new ProductRepo();
+        OrderRepo orderRepo = new OrderMapRepo();
+        ShopService shopService = new ShopService(productRepo, orderRepo);
         List<String> productsIds = List.of("1", "2");
 
         //WHEN
@@ -44,7 +48,9 @@ class ShopServiceTest {
     @Test
     void getListOfOrders_shouldBeOnePROCESSINGOrder_whenOnlyOnePROCESSINGOrderInRepo() {
         //GIVEN
-        ShopService shopService = new ShopService();
+        ProductRepo productRepo = new ProductRepo();
+        OrderRepo orderRepo = new OrderMapRepo();
+        ShopService shopService = new ShopService(productRepo, orderRepo);
         List<String> productsIds = List.of("1");
         shopService.addOrder(productsIds);
 
@@ -58,7 +64,9 @@ class ShopServiceTest {
     @Test
     void getListOfOrders_shouldBeZeroIN_DELIVERYOrders_whenOnlyOnePROCESSINGOrderInRepo() {
         //GIVEN
-        ShopService shopService = new ShopService();
+        ProductRepo productRepo = new ProductRepo();
+        OrderRepo orderRepo = new OrderMapRepo();
+        ShopService shopService = new ShopService(productRepo, orderRepo);
         List<String> productsIds = List.of("1");
         shopService.addOrder(productsIds);
 
@@ -72,7 +80,9 @@ class ShopServiceTest {
     @Test
     void updateOrder_shouldBeOneOrderIN_DELIVERY_whenUpdatedToIN_DELIVERY() {
         //GIVEN
-        ShopService shopService = new ShopService();
+        ProductRepo productRepo = new ProductRepo();
+        OrderRepo orderRepo = new OrderMapRepo();
+        ShopService shopService = new ShopService(productRepo, orderRepo);
         List<String> productsIds = List.of("1");
         Order order = shopService.addOrder(productsIds);
 
@@ -85,9 +95,28 @@ class ShopServiceTest {
     }
 
     @Test
-    void updateOrder_shouldBeZeroOrdersWithPROCESSING_whenUpdatedToIN_DELIVERY() {
+    void updateOrder_shouldBeZeroOrdersWithPROCESSING_whenUpdatedToIN_DELIVERYandOrderRepoIsMap() {
         //GIVEN
-        ShopService shopService = new ShopService();
+        ProductRepo productRepo = new ProductRepo();
+        OrderRepo orderRepo = new OrderMapRepo();
+        ShopService shopService = new ShopService(productRepo, orderRepo);
+        List<String> productsIds = List.of("1");
+        Order order = shopService.addOrder(productsIds);
+
+        //WHEN
+        shopService.updateOrder(order.id(), OrderStatus.IN_DELIVERY);
+
+        //THEN
+        List<Order> listWithOutdatedOrder = shopService.getListOfOrders(OrderStatus.PROCESSING);
+        assertEquals(0, listWithOutdatedOrder.size());
+    }
+
+    @Test
+    void updateOrder_shouldBeZeroOrdersWithPROCESSING_whenUpdatedToIN_DELIVERYandOrderRepoIsList() {
+        //GIVEN
+        ProductRepo productRepo = new ProductRepo();
+        OrderRepo orderRepo = new OrderListRepo();
+        ShopService shopService = new ShopService(productRepo, orderRepo);
         List<String> productsIds = List.of("1");
         Order order = shopService.addOrder(productsIds);
 
@@ -102,7 +131,9 @@ class ShopServiceTest {
     @Test
     void updateOrder_shouldBeSameTimestamp_whenOrderStatusUpdated() {
         //GIVEN
-        ShopService shopService = new ShopService();
+        ProductRepo productRepo = new ProductRepo();
+        OrderRepo orderRepo = new OrderMapRepo();
+        ShopService shopService = new ShopService(productRepo, orderRepo);
         List<String> productsIds = List.of("1");
         Order order = shopService.addOrder(productsIds);
         Instant expectedTimestamp = order.timestamp();

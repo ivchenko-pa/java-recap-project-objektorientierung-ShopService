@@ -1,10 +1,13 @@
+import lombok.RequiredArgsConstructor;
+
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Stream;
 
+@RequiredArgsConstructor
 public class ShopService {
-    private ProductRepo productRepo = new ProductRepo();
-    private OrderRepo orderRepo = new OrderMapRepo();
+    private final ProductRepo productRepo;
+    private final OrderRepo orderRepo;
 
     public Order addOrder(List<String> productIds) throws ProductNotFoundException {
         List<Product> products = new ArrayList<>();
@@ -24,7 +27,7 @@ public class ShopService {
         return orderRepo.addOrder(newOrder);
     }
 
-    public Order updateOrder(String orderId, OrderStatus status){
+    public Order updateOrder(String orderId, OrderStatus status) {
         Order order = orderRepo.getOrderById(orderId);
         orderRepo.removeOrder(orderId);
         orderRepo.addOrder(order.withStatus(status));
