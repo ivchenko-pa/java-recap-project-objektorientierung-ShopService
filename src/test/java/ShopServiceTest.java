@@ -23,16 +23,20 @@ class ShopServiceTest {
     }
 
     @Test
-    void addOrderTest_whenOneInvalidProductIdAndSecondIsValid_expectOneValidInOrder() {
+    void addOrderTest_whenOneInvalidProductIdAndSecondIsValid_expectException() {
         //GIVEN
         ShopService shopService = new ShopService();
         List<String> productsIds = List.of("1", "2");
 
         //WHEN
-        Order actual = shopService.addOrder(productsIds);
-
-        //THEN
-        assertEquals(1, actual.products().size());
+        try {
+            shopService.addOrder(productsIds);
+            //THEN
+        } catch (ProductNotFoundException e) {
+            String expected = "Product mit der Id: 2 konnte nicht bestellt werden!";
+            String actual = e.getMessage();
+            assertEquals(expected, actual);
+        }
     }
 
     @Test
