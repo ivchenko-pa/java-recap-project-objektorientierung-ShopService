@@ -1,21 +1,21 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class ShopService {
     private ProductRepo productRepo = new ProductRepo();
     private OrderRepo orderRepo = new OrderMapRepo();
 
-    public Order addOrder(List<String> productIds) {
+    public Order addOrder(List<String> productIds) throws ProductNotFoundException {
         List<Product> products = new ArrayList<>();
         for (String productId : productIds) {
-
-            productRepo.getProductById(productId).ifPresentOrElse(
-                    product -> products.add(product),
-                    () -> System.out.println("Product mit der Id: " + productId + " konnte nicht bestellt werden!")
-            );
+            try {
+                Product product = productRepo.getProductById(productId).orElseThrow();
+                products.add(product);
+            } catch (NoSuchElementException e) {
+                var productNotFoundException = new ProductNotFoundException("Product mit der Id: " + productId + " konnte nicht bestellt werden!");
+                productNotFoundException.initCause(e);
+                throw productNotFoundException;
+            }
         }
 
         Order newOrder = new Order(UUID.randomUUID().toString(), products);
