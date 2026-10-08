@@ -1,6 +1,6 @@
 import java.util.NoSuchElementException;
 
-public class ProductNotFoundException extends NoSuchElementException {
+public class ProductNotFoundException extends Exception {
 
     public ProductNotFoundException() {
     }

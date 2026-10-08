@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ShopServiceTest {
 
     @Test
-    void addOrderTest() {
+    void addOrderTest() throws ProductNotFoundException {
         //GIVEN
         ProductRepo productRepo = new ProductRepo();
         OrderRepo orderRepo = new OrderMapRepo();
@@ -49,7 +49,7 @@ class ShopServiceTest {
     }
 
     @Test
-    void getListOfOrders_shouldBeOnePROCESSINGOrder_whenOnlyOnePROCESSINGOrderInRepo() {
+    void getListOfOrders_shouldBeOnePROCESSINGOrder_whenOnlyOnePROCESSINGOrderInRepo() throws ProductNotFoundException {
         //GIVEN
         ProductRepo productRepo = new ProductRepo();
         OrderRepo orderRepo = new OrderMapRepo();
@@ -66,7 +66,7 @@ class ShopServiceTest {
     }
 
     @Test
-    void getListOfOrders_shouldBeZeroIN_DELIVERYOrders_whenOnlyOnePROCESSINGOrderInRepo() {
+    void getListOfOrders_shouldBeZeroIN_DELIVERYOrders_whenOnlyOnePROCESSINGOrderInRepo() throws ProductNotFoundException {
         //GIVEN
         ProductRepo productRepo = new ProductRepo();
         OrderRepo orderRepo = new OrderMapRepo();
@@ -83,7 +83,7 @@ class ShopServiceTest {
     }
 
     @Test
-    void updateOrder_shouldBeOneOrderIN_DELIVERY_whenUpdatedToIN_DELIVERY() {
+    void updateOrder_shouldBeOneOrderIN_DELIVERY_whenUpdatedToIN_DELIVERY() throws ProductNotFoundException {
         //GIVEN
         ProductRepo productRepo = new ProductRepo();
         OrderRepo orderRepo = new OrderMapRepo();
@@ -101,7 +101,7 @@ class ShopServiceTest {
     }
 
     @Test
-    void updateOrder_shouldBeZeroOrdersWithPROCESSING_whenUpdatedToIN_DELIVERYandOrderRepoIsMap() {
+    void updateOrder_shouldBeZeroOrdersWithPROCESSING_whenUpdatedToIN_DELIVERYandOrderRepoIsMap() throws ProductNotFoundException {
         //GIVEN
         ProductRepo productRepo = new ProductRepo();
         OrderRepo orderRepo = new OrderMapRepo();
@@ -119,7 +119,7 @@ class ShopServiceTest {
     }
 
     @Test
-    void updateOrder_shouldBeZeroOrdersWithPROCESSING_whenUpdatedToIN_DELIVERYandOrderRepoIsList() {
+    void updateOrder_shouldBeZeroOrdersWithPROCESSING_whenUpdatedToIN_DELIVERYandOrderRepoIsList() throws ProductNotFoundException {
         //GIVEN
         ProductRepo productRepo = new ProductRepo();
         OrderRepo orderRepo = new OrderListRepo();
@@ -137,7 +137,7 @@ class ShopServiceTest {
     }
 
     @Test
-    void updateOrder_shouldBeSameTimestamp_whenOrderStatusUpdated() {
+    void updateOrder_shouldBeSameTimestamp_whenOrderStatusUpdated() throws ProductNotFoundException {
         //GIVEN
         ProductRepo productRepo = new ProductRepo();
         OrderRepo orderRepo = new OrderMapRepo();
@@ -156,7 +156,7 @@ class ShopServiceTest {
     }
 
     @Test
-    void getOldestOrderPerStatus_mapSizeShouldBeOne_whenWhenThreeOrdersInOneStatus() {
+    void getOldestOrderPerStatus_mapSizeShouldBeOne_whenWhenThreeOrdersInOneStatus() throws ProductNotFoundException {
         //WHEN
         var shopService = new ShopService(new ProductRepo(), new OrderMapRepo(), new IdService());
         var order1 = shopService.addOrder(List.of("1"));
@@ -172,7 +172,7 @@ class ShopServiceTest {
     }
 
     @Test
-    void getOldestOrderPerStatus_mapSizeShouldBeTwo_whenWhenTwoOrdersofThreeHaveDifferentStatus() {
+    void getOldestOrderPerStatus_mapSizeShouldBeTwo_whenWhenTwoOrdersofThreeHaveDifferentStatus() throws ProductNotFoundException {
         //WHEN
         var shopService = new ShopService(new ProductRepo(), new OrderMapRepo(), new IdService());
         var order1 = shopService.addOrder(List.of("1"));
@@ -189,7 +189,7 @@ class ShopServiceTest {
     }
 
     @Test
-    void getOldestOrderPerStatus_mapSizeShouldBeTHree_whenAllThreeOrdersHaveDifferentStatus() {
+    void getOldestOrderPerStatus_mapSizeShouldBeTHree_whenAllThreeOrdersHaveDifferentStatus() throws ProductNotFoundException {
         //WHEN
         var shopService = new ShopService(new ProductRepo(), new OrderMapRepo(), new IdService());
         var order1 = shopService.addOrder(List.of("1"));
@@ -207,7 +207,7 @@ class ShopServiceTest {
     }
 
     @Test
-    void getOldestOrderPerStatus_secondOldestShouldAppearInMap_whenVeryOldestUpdated() {
+    void getOldestOrderPerStatus_secondOldestShouldAppearInMap_whenVeryOldestUpdated() throws ProductNotFoundException {
         //WHEN
         var shopService = new ShopService(new ProductRepo(), new OrderMapRepo(), new IdService());
         var order1 = shopService.addOrder(List.of("1"));
