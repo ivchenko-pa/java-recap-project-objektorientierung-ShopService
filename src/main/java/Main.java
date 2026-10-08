@@ -1,4 +1,6 @@
-import java.util.List;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.*;
 
 public class Main {
 
@@ -10,9 +12,48 @@ public class Main {
 
         var shopService = new ShopService(productRepo, orderRepo, idService);
 
-        shopService.addOrder(List.of("1"));
-        shopService.addOrder(List.of("1"));
-        shopService.addOrder(List.of("1"));
-        System.out.println(orderRepo.getOrders());
+        var ordersAliasesDatabase = new HashMap<String, String>();
+
+        try (var in = new Scanner(Path.of("src/main/resources/transactions.txt"))) {
+            while (in.hasNext()){
+                String command = in.nextLine();
+                executeCommand(command, shopService, ordersAliasesDatabase);
+            }
+        } catch (IOException e) {
+            throw  new RuntimeException("File not found");
+        }
+    }
+
+    public static void executeCommand(String command, ShopService shopService, Map<String, String> ordersAliasesDatabase){
+        String[] splittedCommand = command.split(" ");
+        System.out.println(Arrays.toString(splittedCommand));
+        switch (splittedCommand[0]){
+            case "addOrder":
+                List<String> productsList = Arrays.stream(splittedCommand)
+                        .skip(2)
+                        .toList();
+                try {
+                    Order order = shopService.addOrder(productsList);
+                    ordersAliasesDatabase.put(splittedCommand[1], order.id());
+                } catch (ProductNotFoundException e) {
+                    System.out.println(e.getMessage());;
+                }
+                break;
+            case "setStatus":
+                String id = ordersAliasesDatabase.get(splittedCommand[1]);
+                String newStatus = splittedCommand[2];
+                for (OrderStatus orderStatus : OrderStatus.values()){
+                    if (orderStatus.name().equals(newStatus)){
+                        shopService.updateOrder(id, orderStatus);
+                    }
+                }
+                break;
+            case "printOrders":
+                for(OrderStatus orderStatus : OrderStatus.values())
+                System.out.println(shopService.getListOfOrders(orderStatus));
+                break;
+            default:
+                System.out.println("Bad command");
+        }
     }
 }
