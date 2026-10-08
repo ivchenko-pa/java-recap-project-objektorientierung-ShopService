@@ -34,7 +34,7 @@ class ShopServiceTest {
         OrderRepo orderRepo = new OrderMapRepo();
         IdService idService = new IdService();
         ShopService shopService = new ShopService(productRepo, orderRepo, idService);
-        List<String> productsIds = List.of("1", "2");
+        List<String> productsIds = List.of("1", "5");
 
         //WHEN
         try {
@@ -42,7 +42,7 @@ class ShopServiceTest {
             fail("Expected ProductNotAvailableException not thrown, even though product 2 was ordered, that does not exist.");
             //THEN
         } catch (ProductNotFoundException e) {
-            String expected = "Product mit der Id: 2 konnte nicht bestellt werden!";
+            String expected = "Product mit der Id: 5 konnte nicht bestellt werden!";
             String actual = e.getMessage();
             assertEquals(expected, actual);
         }
