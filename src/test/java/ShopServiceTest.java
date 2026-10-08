@@ -12,7 +12,8 @@ class ShopServiceTest {
         //GIVEN
         ProductRepo productRepo = new ProductRepo();
         OrderRepo orderRepo = new OrderMapRepo();
-        ShopService shopService = new ShopService(productRepo, orderRepo);
+        IdService idService = new IdService();
+        ShopService shopService = new ShopService(productRepo, orderRepo, idService);
         List<String> productsIds = List.of("1");
 
         //WHEN
@@ -30,7 +31,8 @@ class ShopServiceTest {
         //GIVEN
         ProductRepo productRepo = new ProductRepo();
         OrderRepo orderRepo = new OrderMapRepo();
-        ShopService shopService = new ShopService(productRepo, orderRepo);
+        IdService idService = new IdService();
+        ShopService shopService = new ShopService(productRepo, orderRepo, idService);
         List<String> productsIds = List.of("1", "2");
 
         //WHEN
@@ -50,7 +52,8 @@ class ShopServiceTest {
         //GIVEN
         ProductRepo productRepo = new ProductRepo();
         OrderRepo orderRepo = new OrderMapRepo();
-        ShopService shopService = new ShopService(productRepo, orderRepo);
+        IdService idService = new IdService();
+        ShopService shopService = new ShopService(productRepo, orderRepo, idService);
         List<String> productsIds = List.of("1");
         shopService.addOrder(productsIds);
 
@@ -66,7 +69,8 @@ class ShopServiceTest {
         //GIVEN
         ProductRepo productRepo = new ProductRepo();
         OrderRepo orderRepo = new OrderMapRepo();
-        ShopService shopService = new ShopService(productRepo, orderRepo);
+        IdService idService = new IdService();
+        ShopService shopService = new ShopService(productRepo, orderRepo, idService);
         List<String> productsIds = List.of("1");
         shopService.addOrder(productsIds);
 
@@ -82,7 +86,8 @@ class ShopServiceTest {
         //GIVEN
         ProductRepo productRepo = new ProductRepo();
         OrderRepo orderRepo = new OrderMapRepo();
-        ShopService shopService = new ShopService(productRepo, orderRepo);
+        IdService idService = new IdService();
+        ShopService shopService = new ShopService(productRepo, orderRepo, idService);
         List<String> productsIds = List.of("1");
         Order order = shopService.addOrder(productsIds);
 
@@ -99,7 +104,8 @@ class ShopServiceTest {
         //GIVEN
         ProductRepo productRepo = new ProductRepo();
         OrderRepo orderRepo = new OrderMapRepo();
-        ShopService shopService = new ShopService(productRepo, orderRepo);
+        IdService idService = new IdService();
+        ShopService shopService = new ShopService(productRepo, orderRepo, idService);
         List<String> productsIds = List.of("1");
         Order order = shopService.addOrder(productsIds);
 
@@ -116,7 +122,8 @@ class ShopServiceTest {
         //GIVEN
         ProductRepo productRepo = new ProductRepo();
         OrderRepo orderRepo = new OrderListRepo();
-        ShopService shopService = new ShopService(productRepo, orderRepo);
+        IdService idService = new IdService();
+        ShopService shopService = new ShopService(productRepo, orderRepo, idService);
         List<String> productsIds = List.of("1");
         Order order = shopService.addOrder(productsIds);
 
@@ -133,7 +140,8 @@ class ShopServiceTest {
         //GIVEN
         ProductRepo productRepo = new ProductRepo();
         OrderRepo orderRepo = new OrderMapRepo();
-        ShopService shopService = new ShopService(productRepo, orderRepo);
+        IdService idService = new IdService();
+        ShopService shopService = new ShopService(productRepo, orderRepo, idService);
         List<String> productsIds = List.of("1");
         Order order = shopService.addOrder(productsIds);
         Instant expectedTimestamp = order.timestamp();

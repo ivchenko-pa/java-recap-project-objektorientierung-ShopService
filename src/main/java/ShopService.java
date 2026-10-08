@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 public class ShopService {
     private final ProductRepo productRepo;
     private final OrderRepo orderRepo;
+    private final IdService idService;
 
     public Order addOrder(List<String> productIds) throws ProductNotFoundException {
         List<Product> products = new ArrayList<>();
@@ -22,7 +23,7 @@ public class ShopService {
             }
         }
 
-        Order newOrder = new Order(UUID.randomUUID().toString(), Instant.now(), products);
+        Order newOrder = new Order(idService.generateId(), Instant.now(), products);
 
         return orderRepo.addOrder(newOrder);
     }
