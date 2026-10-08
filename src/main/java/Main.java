@@ -9,10 +9,10 @@ public class Main {
         IdService idService = new IdService();
 
         var shopService = new ShopService(productRepo, orderRepo, idService);
-        shopService.addOrder(List.of("1"));
-        shopService.addOrder(List.of("1"));
-        shopService.addOrder(List.of("1"));
-        System.out.println(shopService.getListOfOrders(OrderStatus.PROCESSING));
-    }
 
+        shopService.addOrder(List.of("1"));
+        shopService.addOrder(List.of("1"));
+        shopService.addOrder(List.of("1"));
+        System.out.println(orderRepo.getOrders());
+    }
 }

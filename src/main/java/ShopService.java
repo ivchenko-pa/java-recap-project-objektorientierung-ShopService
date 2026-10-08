@@ -41,4 +41,19 @@ public class ShopService {
         List<Order> ordersList = ordersStream.toList();
         return ordersList;
     }
+
+    public Map<OrderStatus, Order> getOldestOrderPerStatus() {
+        Map<OrderStatus, Order> pendingOrders = new HashMap<>();
+        for (OrderStatus orderStatus : OrderStatus.values()) {
+            List<Order> ordersGroupedByStatusAndSourtedByTimestamp = orderRepo.getOrders().stream()
+                    .filter(order -> order.status().equals(orderStatus))
+                    .sorted((order1, order2) -> order1.timestamp().compareTo(order2.timestamp()))
+                    .toList();
+
+            if (ordersGroupedByStatusAndSourtedByTimestamp.size() > 0) {
+                pendingOrders.put(orderStatus, ordersGroupedByStatusAndSourtedByTimestamp.get(0));
+            }
+        }
+        return pendingOrders;
+    }
 }
