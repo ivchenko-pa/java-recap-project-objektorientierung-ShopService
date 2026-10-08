@@ -2,6 +2,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -153,4 +154,75 @@ class ShopServiceTest {
         Instant actualTimestamp = order.timestamp();
         assertEquals(expectedTimestamp, actualTimestamp);
     }
+
+    @Test
+    void getOldestOrderPerStatus_mapSizeShouldBeOne_whenWhenThreeOrdersInOneStatus() {
+        //WHEN
+        var shopService = new ShopService(new ProductRepo(), new OrderMapRepo(), new IdService());
+        var order1 = shopService.addOrder(List.of("1"));
+        var order2 = shopService.addOrder(List.of("1"));
+        var order3 = shopService.addOrder(List.of("1"));
+
+        //WHEN
+        Map<OrderStatus, Order> actualMap = shopService.getOldestOrderPerStatus();
+        var actualMapSize = actualMap.size();
+
+        //THEN
+        assertEquals(1, actualMapSize);
+    }
+
+    @Test
+    void getOldestOrderPerStatus_mapSizeShouldBeTwo_whenWhenTwoOrdersofThreeHaveDifferentStatus() {
+        //WHEN
+        var shopService = new ShopService(new ProductRepo(), new OrderMapRepo(), new IdService());
+        var order1 = shopService.addOrder(List.of("1"));
+        var order2 = shopService.addOrder(List.of("1"));
+        var order3 = shopService.addOrder(List.of("1"));
+
+        //WHEN
+        shopService.updateOrder(order3.id(), OrderStatus.COMPLETED);
+        Map<OrderStatus, Order> actualMap = shopService.getOldestOrderPerStatus();
+        var actualMapSize = actualMap.size();
+
+        //THEN
+        assertEquals(2, actualMapSize);
+    }
+
+    @Test
+    void getOldestOrderPerStatus_mapSizeShouldBeTHree_whenAllThreeOrdersHaveDifferentStatus() {
+        //WHEN
+        var shopService = new ShopService(new ProductRepo(), new OrderMapRepo(), new IdService());
+        var order1 = shopService.addOrder(List.of("1"));
+        var order2 = shopService.addOrder(List.of("1"));
+        var order3 = shopService.addOrder(List.of("1"));
+
+        //WHEN
+        shopService.updateOrder(order1.id(), OrderStatus.COMPLETED);
+        shopService.updateOrder(order2.id(), OrderStatus.IN_DELIVERY);
+        Map<OrderStatus, Order> actualMap = shopService.getOldestOrderPerStatus();
+        var actualMapSize = actualMap.size();
+
+        //THEN
+        assertEquals(3, actualMapSize);
+    }
+
+    @Test
+    void getOldestOrderPerStatus_secondOldestShouldAppearInMap_whenVeryOldestUpdated() {
+        //WHEN
+        var shopService = new ShopService(new ProductRepo(), new OrderMapRepo(), new IdService());
+        var order1 = shopService.addOrder(List.of("1"));
+        var order2 = shopService.addOrder(List.of("1"));
+        var order3 = shopService.addOrder(List.of("1"));
+
+        var expectedInProcessing = order2.id();
+        var expectedInDelivery = order1.id();
+
+        //WHEN
+        shopService.updateOrder(expectedInDelivery, OrderStatus.IN_DELIVERY);
+        Map<OrderStatus, Order> actualMap = shopService.getOldestOrderPerStatus();
+
+        //THEN
+        assertEquals(expectedInProcessing, actualMap.get(OrderStatus.PROCESSING).id());
+    }
+
 }
